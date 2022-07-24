@@ -1,43 +1,35 @@
+<h1>Forum</h1>
 
+<%= link_to 'New Question', new_question_path %> 
+<br />
+<br />
 
+<% @questions.each do |question| %>
+  <div style="border: 1px solid black; padding: 10px; background-color: #add8e6;">
+  <h3><%= question.title %></h3>
+  <%= time_ago_in_words(question.created_at) %> ago by <%= question.user.email %>
+  <br />
 
-<div class="row">
-  <div class="col-sm-6">
-    <h1>Questions</h1>
-  </div>
+  <%= link_to 'Edit', edit_question_path(question) %> 
 
-  <div class="col-sm-6 text-end">
-  <%= link_to new_question_path, class: 'btn btn-primary' do %>
-    Add New Question
+  <%= link_to 'Delete', question, :confirm => 'Are you sure?', :method => :delete %> 
+
+  <% if question.answers.size > 0 %>
+    <h4>Answers</h4>
+
+    <%= render question.answers %>
+
+    <% end %> 
+
+    <hr />
+    <p>Add Answer</p>
+    <%= form_for(question, question.answers.build) do |f| %> 
+      <%= f.text_area :content, :rows => 5, :cols => 80 %> 
+      <%= suxbmit_tag "Add" %> 
+      <% end %> 
+  </div> 
+  <br />
+  <br />
   <% end %>
-  </div>
-</div>
-
-<div class="table-responsive">
-  <table class="table table-striped table-bordered table-hover">
-    <thead>
-      <tr>
-    
-
-            <th>Content</th>
-            
-          <th></th>
-        
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @questions.each do |question| %>
-        <%= content_tag :tr, id: dom_id(question), class: dom_class(question) do %>
-          
-
-                      <td><%= question.content %></td>
-          
-          
-            <td><%= link_to 'Show', question %></td>
-          
-        <% end %>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+  
+   
